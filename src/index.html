@@ -1,17 +1,673 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel 006 - Luxury Accommodation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #000000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: #000000;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #gold, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23e8f4f8" width="1200" height="600"/><path fill="%23d1ecf1" d="M0 300L50 320C100 340 200 380 300 390C400 400 500 380 600 370C700 360 800 360 900 350C1000 340 1100 320 1150 310L1200 300V600H1150C1100 600 1000 600 900 600C800 600 700 600 600 600C500 600 400 600 300 600C200 600 100 600 50 600H0V300Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #111111
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #2c3e50;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            animation: fadeInUp 1s ease-out 0.4s both;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Sections */
+        section {
+            padding: 5rem 0;
+            margin-top: 80px;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: #ffffff;
+        }
+        
+        /* Rooms Section */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .room-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .room-image {
+            height: 200px;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .room-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #black;
+            transition: left 0.6s;
+        }
+        
+        .room-card:hover .room-image::before {
+            left: 100%;
+        }
+        
+        .room-info {
+            padding: 2rem;
+        }
+        
+        .room-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #000000;
+        }
+        
+        .room-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-top: 1rem;
+        }
+        
+        /* Reservation Form */
+        .reservation-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: #000000;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #add8e6;
+        }
+        
+        .success-icon {
+            font-size: 3rem;
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-  </main>
-</body>
+    <div class="floating-elements">
+        <div class="floating-element" style="width: 50px; height: 50px; top: 20%; left: 10%; animation-delay: -1s;"></div>
+        <div class="floating-element" style="width: 30px; height: 30px; top: 60%; right: 15%; animation-delay: -3s;"></div>
+        <div class="floating-element" style="width: 40px; height: 40px; top: 80%; left: 70%; animation-delay: -2s;"></div>
+    </div>
 
+    <header>
+        <nav class="container">
+            <div class="logo" style="color: #ffffff !important;">Hotel 006</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="#reservation">Book Now</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Hotel 006</h1>
+            <p>Experience luxury and comfort in the heart of the city. Where every stay becomes an unforgettable memory.</p>
+            <a href="#reservation" class="cta-button">Book Your Stay</a>
+        </div>
+    </section>
+
+    <section id="rooms">
+        <div class="container">
+            <h2 class="section-title">Our Luxurious Rooms</h2>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <div class="room-image">Cinderella Suite</div>
+                    <div class="room-info">
+                        <h3>Cinderella Suite</h3>
+                        <p>Ultimate luxury with panoramic city views, premium furnishing, and exclusive amenities.</p>
+                        <div class="room-price">$3/night</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reservation">
+        <div class="container">
+            <h2 class="section-title">Make a Reservation</h2>
+            <form class="reservation-form" id="reservationForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="checkin">Check-in Date</label>
+                        <input type="date" id="checkin" name="checkin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout">Check-out Date</label>
+                        <input type="date" id="checkout" name="checkout" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="roomType">Room Type</label>
+                        <select id="roomType" name="roomType" required>
+                            <option value="">Select a room</option>
+                            <option value="cinderella">Cinderella Suite - $3/night</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="guests">Number of Guests</label>
+                        <select id="guests" name="guests" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Guest</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialRequests">Special Requests</label>
+                    <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special requirements or requests... Breakfast is included... Miss Vickys? Pickles?"></textarea>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%;">Submit Reservation</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Information</h2>
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p><strong>Address:</strong> 3511 Spruce Drive SW, Calgary, AB T3C3A5</p>
+                <p><strong>Phone:</strong> +1 (403) 629-6152</p>
+                <p><strong>Email:</strong> reservations@hotel006.1349175ab.com</p>
+                <p><strong>Check-in:</strong> 3:00 PM | <strong>Check-out:</strong> 11:00 AM</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Hotel 006. All rights reserved. | Luxury redefined.</p>
+        </div>
+    </footer>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="success-icon">✓</div>
+            <h3>Reservation Confirmed!</h3>
+            <p>Thank you for choosing Hotel 006. Your reservation details have been sent to your email.</p>
+            <div id="reservationSummary" style="text-align: left; background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkin').min = today;
+        document.getElementById('checkout').min = today;
+
+        // Update checkout min date when checkin changes
+        document.getElementById('checkin').addEventListener('change', function() {
+            const checkinDate = new Date(this.value);
+            checkinDate.setDate(checkinDate.getDate() + 1);
+            document.getElementById('checkout').min = checkinDate.toISOString().split('T')[0];
+        });
+
+        // Form submission
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const reservation = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                checkin: formData.get('checkin'),
+                checkout: formData.get('checkout'),
+                roomType: formData.get('roomType'),
+                guests: formData.get('guests'),
+                specialRequests: formData.get('specialRequests')
+            };
+
+            // Calculate total cost
+            const roomPrices = {
+                'standard': 120,
+                'enhanced': 200,
+                'cinderella': 3
+            };
+            
+            const checkinDate = new Date(reservation.checkin);
+            const checkoutDate = new Date(reservation.checkout);
+            const nights = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+            const pricePerNight = roomPrices[reservation.roomType];
+            const totalCost = nights * pricePerNight;
+
+            // Generate confirmation number
+            const confirmationNumber = 'HTL006-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+            // Prepare data for CGI script
+            const cgiData = new FormData();
+            cgiData.append('firstName', reservation.firstName);
+            cgiData.append('lastName', reservation.lastName);
+            cgiData.append('email', 'sean.watkins@gmail.com');
+            cgiData.append('phone', reservation.phone);
+            cgiData.append('checkin', reservation.checkin);
+            cgiData.append('checkout', reservation.checkout);
+            cgiData.append('roomType', reservation.roomType);
+            cgiData.append('guests', reservation.guests);
+            cgiData.append('specialRequests', reservation.specialRequests || '');
+            cgiData.append('nights', nights);
+            cgiData.append('pricePerNight', pricePerNight);
+            cgiData.append('totalCost', totalCost);
+            cgiData.append('confirmationNumber', confirmationNumber);
+	    cgiData.append('_to', 'sean.watkins@gmail.com');
+
+		console.log (cgiData);
+
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Processing...';
+            submitBtn.disabled = true;
+
+            // Call CGI script
+            fetch('https://formsubmit.co/ajax/8a664a7f3d4268d2c1c7b6c70ce15a47', {
+               method: 'POST',
+                body: cgiData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Show confirmation modal
+                const modal = document.getElementById('confirmationModal');
+                const summary = document.getElementById('reservationSummary');
+                
+                summary.innerHTML = `
+                    <strong>Reservation Summary:</strong><br>
+                    Confirmation #: ${confirmationNumber}<br>
+                    Guest: ${reservation.firstName} ${reservation.lastName}<br>
+                    Dates: ${new Date(reservation.checkin).toLocaleDateString()} - ${new Date(reservation.checkout).toLocaleDateString()}<br>
+                    Room: ${reservation.roomType.charAt(0).toUpperCase() + reservation.roomType.slice(1)}<br>
+                    Guests: ${reservation.guests}<br>
+                    Nights: ${nights}<br>
+                    Total: ${totalCost}
+                `;
+                
+                modal.style.display = 'block';
+                
+                // Reset form
+                //this.reset();
+                console.log('Reservation submitted successfully via CGI script');
+
+
+                console.log('CGI Response:', data);
+            })
+            .catch(error => {
+                console.error('Error submitting reservation:', error);
+                alert('Sorry, there was an error processing your reservation. Please try again or contact us directly at +1 (555) 123-4567.');
+            })
+            .finally(() => {
+                // Restore button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+
+        // Modal close functionality
+        const modal = document.getElementById('confirmationModal');
+        const closeBtn = document.querySelector('.close');
+
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some interactive animations
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.room-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
 </html>
